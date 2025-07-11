@@ -22,13 +22,18 @@ export default function LoginPage() {
   const { setUser } = useContext(AuthContext);
 
   const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm<IFormInput>({
-    resolver: yupResolver(schema),
-    mode: 'onChange',
-  });
+  register,
+  handleSubmit,
+  formState: { errors },
+} = useForm<IFormInput>({
+  resolver: yupResolver(schema),
+  mode: 'onChange',
+  defaultValues: {
+    username: 'tungnt@softech.vn',
+    password: '123456789',
+  },
+});
+
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     const result = await login(data.username, data.password);
