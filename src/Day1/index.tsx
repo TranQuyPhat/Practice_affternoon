@@ -1,5 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route, NavLink } from "react-router";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  NavLink,
+  useLocation,
+} from "react-router"; 
 import type { User } from "./type/task";
 import AuthContext from "./context";
 import OurTasks from "./page/OurTasks";
@@ -9,33 +15,20 @@ import UpdateTaskPage from "./page/UpdateTask";
 import AccessDeniedPage from "./page/AccesDeniedPage";
 import LoginPage from "./page/LoginPage";
 import "../index.css";
+import { IoIosLogOut } from "react-icons/io";
 
-export default function TasksManagementGuidelines() {
-  const [user, setUser] = useState<User | null>(null);
+function Layout({ user, handleLogout }: { user: User | null; handleLogout: () => void }) {
+  const location = useLocation();
 
-  useEffect(() => {
-    const storedUser = localStorage.getItem("user");
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
-
-  const handleLogout = () => {
-    setUser(null);
-    localStorage.removeItem("user");
-    localStorage.removeItem("access_token");
-    window.location.href = "/login";
-  };
+  const hideLayout = location.pathname === "/login";
 
   return (
-    <AuthContext.Provider value={{ user, setUser }}>
-      <div className="min-h-screen bg-gray-100 text-gray-800">
-        <BrowserRouter>
+    <>
+      {!hideLayout && (
+        <>
           <header className="bg-white shadow-sm">
             <div className="container mx-auto px-6 py-4 flex justify-between items-center">
-              <h1 className="text-xl font-bold text-blue-600">
-                Tasks Management
-              </h1>
+              <h1 className="text-xl font-bold text-blue-600">Tasks Management</h1>
               {user && (
                 <div className="text-sm text-gray-600">
                   Welcome, <span className="font-medium">{user.email}</span>
@@ -76,37 +69,57 @@ export default function TasksManagementGuidelines() {
               >
                 Create Task
               </NavLink>
-
-              {user && (
-                <button
-                  onClick={handleLogout}
-                  className="ml-auto px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white"
-                >
-                  Logout
-                </button>
-              )}
+              <div className="ml-auto flex">
+                {user && (
+                  <button
+                    onClick={handleLogout}
+                    className=" px-4 py-2 rounded bg-red-500 hover:bg-red-600 text-white flex"
+                  >
+                    <IoIosLogOut className="mt-1" />
+                    Logout
+                  </button>
+                )}
+              </div>
             </div>
           </nav>
+        </>
+      )}
+    </>
+  );
+}
 
-          <main className="container mx-auto px-6 py-6">
-            <Routes>
-              <Route index element={user ? <OurTasks /> : <LoginPage />} />
-              <Route path="/login" element={<LoginPage />} />
+export default function TasksManagementGuidelines() {
+  const [user, setUser] = useState<User | null>(null);
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
 
-              {user && <Route path="/tasks" element={<OurTasks />} />}
-              {user && <Route path="/assignee-me" element={<MyTasks />} />}
-              {user && (
-                <Route path="/create-task" element={<CreateTaskPage />} />
-              )}
-              {user && (
-                <Route path="/update-task/:id" element={<UpdateTaskPage />} />
-              )}
+  const handleLogout = () => {
+    setUser(null);
+    localStorage.removeItem("user");
+    localStorage.removeItem("access_token");
+    window.location.href = "/login";
+  };
 
-              <Route path="/*" element={<AccessDeniedPage />} />
-            </Routes>
-          </main>
-        </BrowserRouter>
-      </div>
+  return (
+    <AuthContext.Provider value={{ user, setUser }}>
+      <BrowserRouter>
+        <Layout user={user} handleLogout={handleLogout} />
+        <main className="mx-auto ">
+          <Routes>
+            <Route index element={user ? <OurTasks /> : <LoginPage />} />
+            <Route path="/login" element={<LoginPage />} />
+            {user && <Route path="/tasks" element={<OurTasks />} />}
+            {user && <Route path="/assignee-me" element={<MyTasks />} />}
+            {user && <Route path="/create-task" element={<CreateTaskPage />} />}
+            {user && <Route path="/update-task/:id" element={<UpdateTaskPage />} />}
+            <Route path="/*" element={<AccessDeniedPage />} />
+          </Routes>
+        </main>
+      </BrowserRouter>
     </AuthContext.Provider>
   );
 }

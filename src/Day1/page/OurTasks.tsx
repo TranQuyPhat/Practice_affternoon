@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import AuthContext from "../context";
-import { getTasks } from "../services/api";
+import { deleteTaskById, getTasks } from "../services/api";
 import type { Task } from "../type/task";
 import { useNavigate } from "react-router";
 import SearchTasks from "../components/SearchTask";
@@ -34,6 +34,18 @@ export default function OurTasks() {
   const handleOnSearch = (filters: { status?: string; priority?: string }) => {
     setFilters(filters);
   };
+const handleOnDelete = async (id: number) => {
+  if (!window.confirm("Are you sure you want to delete this task?")) return;
+
+  try {
+    await deleteTaskById(id);
+    setTasks((prev) => prev.filter((task) => task.id !== id));
+    console.log(`Deleted task ${id}`);
+  } catch (err) {
+    console.error("Failed to delete task:", err);
+    alert("Delete failed");
+  }
+};
 
   const filteredTasks = tasks.filter((task) => {
     let matches = true;
@@ -43,8 +55,7 @@ export default function OurTasks() {
   });
 
   return (
-    <div className="min-h-screen bg-gray-100 py-10">
-      <div className="max-w-6xl mx-auto bg-white p-6 rounded shadow">
+    <div className="min-h-screen bg-gray-100 p-10">
         <h2 className="text-2xl font-semibold text-blue-600 mb-4">
           All Tasks
         </h2>
@@ -108,9 +119,15 @@ export default function OurTasks() {
                     <td className="px-4 py-2">
                       <button
                         onClick={() => handleOnEdit(task.id)}
-                        className="text-blue-600 hover:underline"
+                        className="text-gray-900 hover:bg-amber-500 bg-amber-400 p-2 rounded mx-2"
                       >
                         Edit
+                      </button>
+                        <button
+                        onClick={() => handleOnDelete(task.id)}
+                        className="text-gray-50 hover:bg-red-700 bg-red-600 p-2 rounded"
+                      >
+                        Delete
                       </button>
                     </td>
                   </tr>
@@ -126,6 +143,5 @@ export default function OurTasks() {
           </table>
         </div>
       </div>
-    </div>
   );
 }

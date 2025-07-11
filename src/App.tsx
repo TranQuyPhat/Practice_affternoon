@@ -6,7 +6,7 @@ import TasksManagementGuidelines from "./Day1";
 
 function App() {
   return (
-    <TasksManagementGuidelines/>
+      <TasksManagementGuidelines />
   );
 }
 

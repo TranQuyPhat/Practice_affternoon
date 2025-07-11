@@ -40,25 +40,25 @@ export default function MyTasks() {
       {tasks.length === 0 ? (
         <p className="text-gray-500">You don't have any assigned tasks.</p>
       ) : (
-        <div className="overflow-x-auto">
+        <div className="overflow-x-auto container mx-auto mx-8">
           <table className="min-w-full table-auto border">
             <thead>
-              <tr className="bg-blue-100 text-left text-sm font-medium text-blue-800">
+              <tr className="bg-blue-100 text-center text-sm font-medium text-blue-800">
                 <th className="px-4 py-2 border">ID</th>
                 <th className="px-4 py-2 border">Title</th>
                 <th className="px-4 py-2 border">Description</th>
                 <th className="px-4 py-2 border">Status</th>
-                <th className="px-4 py-2 border">Assignee ID</th>``
+                <th className="px-4 py-2 border">Assignee ID</th>
               </tr>
             </thead>
             <tbody>
               {tasks.map((task: Task) => (
                 <tr key={task.id} className="hover:bg-gray-100 text-sm">
-                  <td className="px-4 py-2 border">{task.id}</td>
+                  <td className="px-4 py-2 border text-center">{task.id}</td>
                   <td className="px-4 py-2 border">{task.title}</td>
                   <td className="px-4 py-2 border">{task.description || "N/A"}</td>
-                  <td className="px-4 py-2 border capitalize">{task.status}</td>
-                  <td className="px-4 py-2 border">{task.assignee_id}</td>
+                  <td className="px-4 py-2 border capitalize text-center">{task.status}</td>
+                  <td className="px-4 py-2 border text-center">{task.assignee_id}</td>
                 </tr>
               ))}
             </tbody>

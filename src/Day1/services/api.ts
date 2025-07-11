@@ -55,3 +55,15 @@ export const getTasksByAssignee = async (assigneeId: number) => {
   });
   return response.json();
 };
+export const deleteTaskById = async (taskId: number) => {
+  const response = await fetch(`${baseUrl}/workspaces/tasks/${taskId}`, {
+    method: "DELETE",
+    headers: defaultHeaders,
+  });
+
+  if (!response.ok) {
+    throw new Error(`Failed to delete task with ID ${taskId}`);
+  }
+
+  return true; 
+};
