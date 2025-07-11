@@ -48,7 +48,7 @@ export default function MyTasks() {
                 <th className="px-4 py-2 border">Title</th>
                 <th className="px-4 py-2 border">Description</th>
                 <th className="px-4 py-2 border">Status</th>
-                <th className="px-4 py-2 border">Assignee ID</th>
+                <th className="px-4 py-2 border">Assignee ID</th>``
               </tr>
             </thead>
             <tbody>

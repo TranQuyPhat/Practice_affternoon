@@ -1,7 +1,5 @@
-import React, { use, useContext } from 'react';
+import React, {  useContext } from 'react';
 import AuthContext from '../context';
-import { useNavigate } from 'react-router';
-import type { User } from '../types';
 
 import { useForm, type SubmitHandler } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -13,7 +11,6 @@ interface IFormInput {
   password: string;
 }
 
-// Validation schema using Yup
 const schema = yup
   .object({
     username: yup.string().email('Email is invalid').required('Email is required'),
@@ -23,26 +20,20 @@ const schema = yup
 
 export default function LoginPage() {
   const { setUser } = useContext(AuthContext);
-  const navigate = useNavigate();
 
-  // react form hook
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm<IFormInput>({
     resolver: yupResolver(schema),
-    defaultValues: {
-      username: 'tungnt@softech.vn',
-      password: '123456789',
-    },
+  
     mode: 'onChange',
   });
 
   const onSubmit: SubmitHandler<IFormInput> = async (data) => {
     console.log('Form submitted:', data);
 
-    // Call API to authenticate user
     const result = await login(data.username, data.password);
     console.log('Login result:', result);
 
@@ -54,19 +45,17 @@ export default function LoginPage() {
 
     setUser(authenticatedUser);
 
-    // save user info to localStorage
     localStorage.setItem('user', JSON.stringify(authenticatedUser));
 
-    // save access token to localStorage
     localStorage.setItem('access_token', result.access_token);
 
-    window.location.href = '/tasks'; // Redirect to tasks page
+    window.location.href = '/tasks'; 
   };
    return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+    <div className=" flex items-center justify-center bg-gray-100">
       <form
         onSubmit={handleSubmit(onSubmit)}
-        className="bg-white p-8 rounded-lg shadow-md w-full max-w-md space-y-6"
+        className="bg-gray-50 p-8 rounded-lg shadow-md w-full max-w-md space-y-6"
       >
         <h2 className="text-2xl font-bold text-center mb-4">Login</h2>
         <div>
@@ -109,7 +98,7 @@ export default function LoginPage() {
           type="submit"
           className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 transition-colors font-semibold"
         >
-          Login
+          Loginn
         </button>
       </form>
     </div>

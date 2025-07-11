@@ -10,11 +10,9 @@ type Props = {
 };
 
 export default function SearchTasks({ onSearch }: Props) {
-  // react form hook
   const {
     register,
     handleSubmit,
-    formState: { errors },
   } = useForm<IFormInput>({
     defaultValues: {
       status: '',

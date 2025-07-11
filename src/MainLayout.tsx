@@ -12,7 +12,6 @@ export default function MainLayout() {
 
   return (
     <div className="relative min-h-screen">
-      {/* HEADER */}
       <header className="p-4 border-b flex justify-between items-center relative">
         <h1 className="font-bold flex items-center gap-2">
           <span role="img" aria-label="icon">📚</span> Bài Tập
@@ -24,8 +23,7 @@ export default function MainLayout() {
           {showDropdown ? 'Đóng ▲' : 'Chọn bài ▼'}
         </button>
 
-        {/* DROPDOWN MENU */}
-        {showDropdown && (
+s        {showDropdown && (
           <div className="absolute top-full right-0 mt-2 bg-white border shadow rounded w-60 z-50 p-4">
             <div className="space-y-2">
               <div>
@@ -47,8 +45,6 @@ export default function MainLayout() {
           </div>
         )}
       </header>
-
-      {/* PAGE CONTENT */}
       <main className="p-4">
         <Outlet />
       </main>
